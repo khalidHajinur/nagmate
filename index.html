@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NagMate – Turn Nagging into Daily Wins</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="NagMate turns private rants into kind, daily to-dos for your partner. Coming soon."
+  />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="referrer" content="no-referrer-when-downgrade" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-soft: #020617;
+      --accent: #f97316;
+      --accent-soft: rgba(249, 115, 22, 0.16);
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: rgba(148, 163, 184, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 50%, #000 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 960px;
+    }
+
+    .card {
+      position: relative;
+      border-radius: 1.75rem;
+      background: linear-gradient(
+        145deg,
+        rgba(15, 23, 42, 0.96),
+        rgba(15, 23, 42, 0.99)
+      );
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      box-shadow:
+        0 40px 80px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(15, 23, 42, 0.9);
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.4fr);
+    }
+
+    @media (max-width: 840px) {
+      .card {
+        display: block;
+      }
+    }
+
+    .glow {
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at top left, rgba(249, 115, 22, 0.2), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.2), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .left {
+      position: relative;
+      padding: 2.5rem 2.7rem;
+      z-index: 1;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .logo-wrap {
+      width: 40px;
+      height: 40px;
+      border-radius: 1rem;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .logo-wrap img {
+      max-width: 70%;
+      height: auto;
+      display: block;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.08rem;
+    }
+
+    .brand-name {
+      font-weight: 650;
+      letter-spacing: -0.03em;
+      font-size: 1.1rem;
+    }
+
+    .brand-tag {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    h1 {
+      font-size: clamp(2.15rem, 3.1vw, 2.7rem);
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+      margin-bottom: 0.9rem;
+    }
+
+    .gradient {
+      background: linear-gradient(120deg, #f97316, #facc15, #38bdf8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.98rem;
+      max-width: 32rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .list {
+      list-style: none;
+      margin-bottom: 2rem;
+      display: grid;
+      gap: 0.7rem;
+      font-size: 0.92rem;
+    }
+
+    .list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+
+    .list-icon {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(249, 115, 22, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      background: rgba(15, 23, 42, 0.9);
+      color: #fed7aa;
+    }
+
+    .list span {
+      color: var(--text-muted);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      padding: 0.25rem 0.7rem;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: var(--text-muted);
+      margin-bottom: 0.7rem;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.35);
+    }
+
+    .form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      align-items: center;
+      margin-bottom: 0.7rem;
+    }
+
+    .input-wrap {
+      position: relative;
+      flex: 1 1 190px;
+      min-width: 0;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      padding: 0.8rem 1rem;
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-main);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .input-wrap input::placeholder {
+      color: #64748b;
+    }
+
+    .input-wrap input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.4);
+      background: rgba(15, 23, 42, 1);
+    }
+
+    button.cta {
+      border-radius: 999px;
+      border: none;
+      padding: 0.78rem 1.7rem;
+      background: linear-gradient(120deg, #f97316, #facc15);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #0b1120;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      white-space: nowrap;
+      box-shadow:
+        0 16px 35px rgba(249, 115, 22, 0.45),
+        0 0 0 1px rgba(15, 23, 42, 0.9);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    button.cta span {
+      font-size: 1rem;
+    }
+
+    button.cta:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 20px 45px rgba(249, 115, 22, 0.55),
+        0 0 0 1px rgba(15, 23, 42, 1);
+    }
+
+    button.cta:active {
+      transform: translateY(0);
+      box-shadow:
+        0 11px 25px rgba(249, 115, 22, 0.4),
+        0 0 0 1px rgba(15, 23, 42, 1);
+    }
+
+    .footnote {
+      font-size: 0.76rem;
+      color: #6b7280;
+    }
+
+    /* Right column – preview card */
+    .right {
+      position: relative;
+      padding: 2.2rem 2.4rem;
+      border-left: 1px solid rgba(148, 163, 184, 0.45);
+      background:
+        radial-gradient(circle at top left, rgba(249, 115, 22, 0.19), transparent 55%),
+        radial-gradient(circle at bottom, rgba(56, 189, 248, 0.16), transparent 60%),
+        linear-gradient(160deg, rgba(15, 23, 42, 0.98), #020617);
+      z-index: 1;
+      min-height: 100%;
+    }
+
+    @media (max-width: 840px) {
+      .right {
+        border-left: none;
+        border-top: 1px solid rgba(148, 163, 184, 0.35);
+      }
+    }
+
+    .side-title {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: #9ca3af;
+      margin-bottom: 0.9rem;
+    }
+
+    .preview-card {
+      border-radius: 1.1rem;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      background: rgba(15, 23, 42, 0.96);
+      padding: 1rem 1rem 0.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    .badge-soft {
+      border-radius: 999px;
+      padding: 0.16rem 0.6rem;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      font-size: 0.7rem;
+    }
+
+    .todo-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.7rem;
+      padding: 0.6rem 0.4rem;
+    }
+
+    .todo-main {
+      display: flex;
+      gap: 0.55rem;
+      align-items: flex-start;
+    }
+
+    .todo-dot {
+      margin-top: 0.26rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent);
+    }
+
+    .todo-text {
+      font-size: 0.86rem;
+      color: var(--text-main);
+    }
+
+    .todo-meta {
+      font-size: 0.72rem;
+      color: #9ca3af;
+      margin-top: 0.16rem;
+    }
+
+    .todo-tag {
+      font-size: 0.72rem;
+      padding: 0.16rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      white-space: nowrap;
+      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .mini-caption {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin: 0.7rem 0 0.2rem;
+    }
+
+    .quote {
+      font-size: 0.84rem;
+      color: #e5e7eb;
+      margin-top: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .quote span {
+      color: #fed7aa;
+    }
+
+    .quote-meta {
+      font-size: 0.72rem;
+      color: #9ca3af;
+    }
+
+    /* visually-hidden utility for accessible labels */
+    .sr-only {
+      position: absolute !important;
+      height: 1px; width: 1px;
+      overflow: hidden;
+      clip: rect(1px, 1px, 1px, 1px);
+      white-space: nowrap;
+      border: 0; padding: 0; margin: -1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="card" role="region" aria-labelledby="site-heading">
+      <div class="glow" aria-hidden="true"></div>
+
+      <!-- LEFT -->
+      <main class="left">
+        <header class="brand-row" aria-hidden="false">
+          <div class="logo-wrap" aria-hidden="true">
+            <!-- replace src with your logo file path -->
+            <img src="/static/nagmate-logo.png" alt="NagMate logo" loading="lazy" />
+          </div>
+          <div class="brand-text">
+            <div id="site-heading" class="brand-name">NagMate</div>
+            <div class="brand-tag">AI Relationship Buddy</div>
+          </div>
+        </header>
+
+        <div class="badge" aria-hidden="true">
+          <span class="dot"></span>
+          <span>Private beta • Coming soon</span>
+        </div>
+
+        <h1>
+          Turn nagging into <span class="gradient">daily wins</span>,
+          not daily fights.
+        </h1>
+
+        <p class="subtitle">
+          NagMate lets each partner vent in private, then quietly turns that
+          into 3–5 kind, concrete tasks for the other person. You never see the
+          rant – only the roadmap.
+        </p>
+
+        <ul class="list" aria-label="Key benefits">
+          <li>
+            <div class="list-icon" aria-hidden="true">◆</div>
+            <span>Couples sign up together and link accounts in seconds.</span>
+          </li>
+          <li>
+            <div class="list-icon" aria-hidden="true">◆</div>
+            <span>Each partner gets a safe space to “tell it like it is”.</span>
+          </li>
+          <li>
+            <div class="list-icon" aria-hidden="true">◆</div>
+            <span>NagMate translates frustration into small, doable daily actions.</span>
+          </li>
+        </ul>
+
+        <form class="form" method="post" action="/waitlist" novalidate aria-describedby="waitlist-desc">
+          <p id="waitlist-desc" class="sr-only">Join the NagMate waitlist for early access. We will only contact you about the product.</p>
+
+          <div class="input-wrap">
+            <label for="email" class="sr-only">Email address</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              autocomplete="email"
+              placeholder="Drop your email for early access"
+              required
+              aria-required="true"
+              aria-label="Email address for waitlist"
+            />
+          </div>
+
+          <button class="cta" type="submit" aria-label="Join the waitlist">
+            Join the waitlist
+            <span aria-hidden="true">→</span>
+          </button>
+
+          <!-- aria-live region for async submission feedback from the server -->
+          <div id="waitlist-status" role="status" aria-live="polite" class="sr-only"></div>
+        </form>
+
+        <p class="footnote">
+          No spam, no drama. We’ll only message you when NagMate is ready to try.
+        </p>
+      </main>
+
+      <!-- RIGHT -->
+      <aside class="right" aria-labelledby="preview-title">
+        <div class="side-title" id="preview-title">NagMate in action (preview)</div>
+
+        <section class="preview-card" aria-label="Preview of generated tasks">
+          <div class="preview-header">
+            <span>Today’s tasks for you</span>
+            <span class="badge-soft">From your partner’s vent</span>
+          </div>
+
+          <div class="todo-row">
+            <div class="todo-main">
+              <div class="todo-dot" aria-hidden="true"></div>
+              <div>
+                <div class="todo-text">
+                  Put your phone away during dinner and ask,
+                  “How was your day, really?”
+                </div>
+                <div class="todo-meta">Communication • Effort: small</div>
+              </div>
+            </div>
+            <div class="todo-tag">Tonight</div>
+          </div>
+
+          <div class="todo-row">
+            <div class="todo-main">
+              <div class="todo-dot" aria-hidden="true"></div>
+              <div>
+                <div class="todo-text">
+                  Take over the bedtime routine so your partner can just rest.
+                </div>
+                <div class="todo-meta">Home • Effort: medium</div>
+              </div>
+            </div>
+            <div class="todo-tag">From her vent</div>
+          </div>
+
+          <div class="todo-row">
+            <div class="todo-main">
+              <div class="todo-dot" aria-hidden="true"></div>
+              <div>
+                <div class="todo-text">
+                  Send one message today that isn’t logistics – just appreciation.
+                </div>
+                <div class="todo-meta">Appreciation • Effort: small</div>
+              </div>
+            </div>
+            <div class="todo-tag">Emotional</div>
+          </div>
+
+          <p class="mini-caption">
+            NagMate never shows you the raw rant. It only serves you
+            the next best step.
+          </p>
+        </section>
+
+        <p class="quote">
+          “Instead of arguing about the same stuff, I just open NagMate
+          and do my three things for the day.”
+          <span>– early tester (we hope)</span>
+        </p>
+        <p class="quote-meta">
+          Not a replacement for therapy or crisis help. Designed for kind,
+          everyday improvement – not control or abuse.
+        </p>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>
