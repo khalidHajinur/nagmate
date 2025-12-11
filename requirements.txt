@@ -1,2 +1,7 @@
 fastapi
 uvicorn[standard]
+gunicorn==20.1.0
+# Add your web framework below:
+# Django==4.2.6
+# OR
+# Flask==2.3.2
